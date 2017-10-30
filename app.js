@@ -10,7 +10,7 @@ const farLimit = 10000;
 
 const container = document.getElementById('app');
 
-const renderer = new three.WebGLRenderer({alpha: true});
+const renderer = new three.WebGLRenderer();
 const camera = new three.PerspectiveCamera(viewAngle, aspectRatio, nearLimit, farLimit);
 
 const scene = new three.Scene();
@@ -18,7 +18,7 @@ const scene = new three.Scene();
 scene.add(camera);
 
 renderer.setSize(width, height);
-renderer.setClearColor(0xFFFFFF, 0);
+renderer.setClearColor(0x1E90FF);
 
 container.appendChild(renderer.domElement);
 
