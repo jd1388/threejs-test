@@ -10,7 +10,6 @@ require('electron-reload')(__dirname, {
 app.on('ready', () => {
     mainWindow= new BrowserWindow({
         frame: false,
-        transparent: true,
         height: 1080,
         width: 1920
     });

@@ -75,8 +75,15 @@ const initLight = () => {
 const update = () => {
     requestAnimationFrame(update);
     rotateCube();
+    moveCameraRandomly();
     renderer.render(scene, camera);
 };
+
+const moveCameraRandomly = () => {
+    camera.position.x += Math.round(Math.random() * 6) - 3;
+    camera.position.y += Math.round(Math.random() * 6) - 3;
+    camera.position.z += Math.round(Math.random() * 6) - 3;
+}
 
 const rotateCube = () => {
     const speed = 0.01;
