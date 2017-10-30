@@ -1,56 +1,89 @@
-import * as three from 'three';
+import * as Three from 'three';
 
 const width = window.innerWidth;
 const height = window.innerHeight;
 
-const viewAngle = 45;
-const aspectRatio = width / height;
-const nearLimit = 0.1;
-const farLimit = 10000;
+let camera,
+    renderer,
+    scene,
+    cube,
+    light;
 
-const container = document.getElementById('app');
+const init = () => {
+    initCamera();
+    initRenderer();
+    initScene();
+    initCube();
+    initLight();
 
-const renderer = new three.WebGLRenderer();
-const camera = new three.PerspectiveCamera(viewAngle, aspectRatio, nearLimit, farLimit);
-
-const scene = new three.Scene();
-
-scene.add(camera);
-
-renderer.setSize(width, height);
-renderer.setClearColor(0x1E90FF);
-
-container.appendChild(renderer.domElement);
-
-const radius = 50;
-const segments = 64;
-const rings = 64;
-
-const sphereMaterial = new three.MeshLambertMaterial({
-    color: 0x0000CC
-});
-
-const sphere = new three.Mesh(
-    new three.SphereGeometry(radius, segments, rings),
-    sphereMaterial
-);
-
-sphere.position.z = -300;
-
-scene.add(sphere);
-
-const pointLight = new three.PointLight(0xFFFFFF);
-
-pointLight.position.x = 10;
-pointLight.position.y = 50;
-pointLight.position.z = 130;
-
-scene.add(pointLight);
-
-const update = () => {
-    renderer.render(scene, camera);
+    scene.add(camera, cube, light);
 
     requestAnimationFrame(update);
+}
+
+const initCamera = () => {
+    const viewAngle = 45;
+    const aspectRatio = width / height;
+    const nearLimit = 0.1;
+    const farLimit = 10000;
+
+    camera = new Three.PerspectiveCamera(viewAngle, aspectRatio, nearLimit, farLimit);
 };
 
-requestAnimationFrame(update);
+const initRenderer = () => {
+    const container = document.getElementById('app');
+
+    renderer = new Three.WebGLRenderer({antialias: true});
+
+    renderer.setSize(width, height);
+    renderer.setClearColor(0x1E90FF);
+
+    container.appendChild(renderer.domElement);
+};
+
+const initScene = () => {
+    scene = new Three.Scene();
+};
+
+const initCube = () => {
+    const cubeWidth = 100;
+    const cubeHeight = 100;
+    const cubeDepth = 100;
+
+    const cubeGeometry = new Three.BoxGeometry(cubeWidth, cubeHeight, cubeDepth);
+
+    const cubeMaterial = new Three.MeshLambertMaterial({
+        color: 0x0000CC
+    });
+
+    cube = new Three.Mesh(
+        cubeGeometry,
+        cubeMaterial
+    );
+
+    cube.position.z = -300;
+};
+
+const initLight = () => {
+    light = new Three.PointLight(0xFFFFFF);
+
+    light.position.x = 10;
+    light.position.y = 50;
+    light.position.z = 130;
+}
+
+const update = () => {
+    requestAnimationFrame(update);
+    rotateCube();
+    renderer.render(scene, camera);
+};
+
+const rotateCube = () => {
+    const speed = 0.01;
+
+    cube.rotation.x -= speed * 2;
+    cube.rotation.y -= speed;
+    cube.rotation.z -= speed * 3;
+};
+
+init();
