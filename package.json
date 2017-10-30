@@ -24,6 +24,7 @@
     "webpack-dev-server": "^2.9.3"
   },
   "dependencies": {
+    "mousetrap": "^1.6.1",
     "three": "^0.87.1"
   }
 }

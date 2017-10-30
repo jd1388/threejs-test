@@ -1,4 +1,5 @@
 import * as Three from 'three';
+import Mousetrap from 'mousetrap';
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -15,6 +16,8 @@ const init = () => {
     initScene();
     initCube();
     initLight();
+
+    initKeybindings();
 
     scene.add(camera, cube, light);
 
@@ -72,18 +75,39 @@ const initLight = () => {
     light.position.z = 130;
 }
 
+const initKeybindings = () => {
+    const cameraMoveSpeed = 3;
+    
+    Mousetrap.bind('d', () => {
+        camera.position.x += cameraMoveSpeed;
+    });
+
+    Mousetrap.bind('a', () => {
+        camera.position.x -= cameraMoveSpeed;
+    });
+
+    Mousetrap.bind('s', () => {
+        camera.position.z += cameraMoveSpeed;
+    });
+
+    Mousetrap.bind('w', () => {
+        camera.position.z -= cameraMoveSpeed;
+    });
+
+    Mousetrap.bind('space', () => {
+        camera.position.y += cameraMoveSpeed;
+    });
+
+    Mousetrap.bind('ctrl', () => {
+        camera.position.y -= cameraMoveSpeed;
+    });
+};
+
 const update = () => {
     requestAnimationFrame(update);
     rotateCube();
-    moveCameraRandomly();
     renderer.render(scene, camera);
 };
-
-const moveCameraRandomly = () => {
-    camera.position.x += Math.round(Math.random() * 6) - 3;
-    camera.position.y += Math.round(Math.random() * 6) - 3;
-    camera.position.z += Math.round(Math.random() * 6) - 3;
-}
 
 const rotateCube = () => {
     const speed = 0.01;
@@ -94,3 +118,4 @@ const rotateCube = () => {
 };
 
 init();
+
