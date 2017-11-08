@@ -56,7 +56,7 @@ const initCube = () => {
     const cubeGeometry = new Three.BoxGeometry(cubeWidth, cubeHeight, cubeDepth);
 
     const cubeMaterial = new Three.MeshLambertMaterial({
-        color: 0x0000CC
+        color: 0xAAAAAA
     });
 
     cube = new Three.Mesh(
@@ -112,9 +112,9 @@ const update = () => {
 const rotateCube = () => {
     const speed = 0.01;
 
-    cube.rotation.x -= speed * 2;
+    cube.rotation.x -= speed;
     cube.rotation.y -= speed;
-    cube.rotation.z -= speed * 3;
+    cube.rotation.z -= speed;
 };
 
 init();
