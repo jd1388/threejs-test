@@ -127,16 +127,7 @@ const rotateCamera = (currentX, currentY) => {
 
 const update = () => {
     requestAnimationFrame(update);
-    // rotateCube();
     renderer.render(scene, camera);
-};
-
-const rotateCube = () => {
-    const speed = 0.01;
-
-    cube.rotation.x -= speed;
-    cube.rotation.y -= speed;
-    cube.rotation.z -= speed;
 };
 
 init();
