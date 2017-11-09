@@ -8,7 +8,9 @@ let camera,
     renderer,
     scene,
     cube,
-    light;
+    light,
+    previousX,
+    previousY;
 
 const init = () => {
     initCamera();
@@ -17,7 +19,7 @@ const init = () => {
     initCube();
     initLight();
 
-    initKeybindings();
+    initControls();
 
     scene.add(camera, cube, light);
 
@@ -55,8 +57,12 @@ const initCube = () => {
 
     const cubeGeometry = new Three.BoxGeometry(cubeWidth, cubeHeight, cubeDepth);
 
+    const cubeTexture = new Three.TextureLoader().load('./resources/blocks/dirt.png');
+    cubeTexture.magFilter = Three.NearestFilter;
+    cubeTexture.minFilter = Three.LinearMipMapLinearFilter;
+
     const cubeMaterial = new Three.MeshLambertMaterial({
-        color: 0xAAAAAA
+        map: cubeTexture
     });
 
     cube = new Three.Mesh(
@@ -75,8 +81,8 @@ const initLight = () => {
     light.position.z = 130;
 }
 
-const initKeybindings = () => {
-    const cameraMoveSpeed = 3;
+const initControls = () => {
+    const cameraMoveSpeed = 10;
     
     Mousetrap.bind('d', () => {
         camera.position.x += cameraMoveSpeed;
@@ -101,11 +107,27 @@ const initKeybindings = () => {
     Mousetrap.bind('ctrl', () => {
         camera.position.y -= cameraMoveSpeed;
     });
+
+    const mouseControls = event => {
+        rotateCamera(event.clientX, event.clientY);
+    };
+
+    document.addEventListener('mousemove', mouseControls, false);
+};
+
+const rotateCamera = (currentX, currentY) => {
+    if (previousX && previousY) {
+        camera.rotation.y += (previousX - currentX) * 0.003;
+        camera.rotation.x += (previousY - currentY) * 0.003;
+    }
+
+    previousX = currentX;
+    previousY = currentY;
 };
 
 const update = () => {
     requestAnimationFrame(update);
-    rotateCube();
+    // rotateCube();
     renderer.render(scene, camera);
 };
 
@@ -118,4 +140,3 @@ const rotateCube = () => {
 };
 
 init();
-
