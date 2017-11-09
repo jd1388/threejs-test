@@ -109,20 +109,17 @@ const initControls = () => {
     });
 
     const mouseControls = event => {
-        rotateCamera(event.clientX, event.clientY);
+        rotateCamera(event.movementX, event.movementY);
     };
 
     document.addEventListener('mousemove', mouseControls, false);
 };
 
 const rotateCamera = (currentX, currentY) => {
-    if (previousX && previousY) {
-        camera.rotation.y += (previousX - currentX) * 0.003;
-        camera.rotation.x += (previousY - currentY) * 0.003;
-    }
+    camera.rotation.y -= currentX * 0.001;
+    camera.rotation.x -= currentY * 0.001;
 
-    previousX = currentX;
-    previousY = currentY;
+    renderer.domElement.requestPointerLock();
 };
 
 const update = () => {
