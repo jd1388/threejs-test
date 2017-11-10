@@ -1,5 +1,4 @@
 import * as Three from 'three';
-import Mousetrap from 'mousetrap';
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -10,7 +9,8 @@ let camera,
     cube,
     light,
     previousX,
-    previousY;
+    previousY,
+    keyMap = {};
 
 const init = () => {
     initCamera();
@@ -74,43 +74,31 @@ const initCube = () => {
 };
 
 const initLight = () => {
-    light = new Three.PointLight(0xFFFFFF);
+    light = new Three.AmbientLight(0xFFFFFF);
 
     light.position.x = 10;
     light.position.y = 50;
     light.position.z = 130;
 }
 
+const mouseControls = event => {
+    rotateCamera(event.movementX, event.movementY);
+};
+
 const initControls = () => {
-    const cameraMoveSpeed = 10;
+    const keyboardDownControls = event => {
+        console.log(event.key);
+        keyMap[event.key] = true;
+    }
+
+    const keyboardUpControls = event => {
+        keyMap[event.key] = false;
+    }
+
+    document.addEventListener('keydown', keyboardDownControls, false);
+    document.addEventListener('keyup', keyboardUpControls, false);
     
-    Mousetrap.bind('d', () => {
-        camera.position.x += cameraMoveSpeed;
-    });
-
-    Mousetrap.bind('a', () => {
-        camera.position.x -= cameraMoveSpeed;
-    });
-
-    Mousetrap.bind('s', () => {
-        camera.position.z += cameraMoveSpeed;
-    });
-
-    Mousetrap.bind('w', () => {
-        camera.position.z -= cameraMoveSpeed;
-    });
-
-    Mousetrap.bind('space', () => {
-        camera.position.y += cameraMoveSpeed;
-    });
-
-    Mousetrap.bind('ctrl', () => {
-        camera.position.y -= cameraMoveSpeed;
-    });
-
-    const mouseControls = event => {
-        rotateCamera(event.movementX, event.movementY);
-    };
+    renderer.domElement.requestPointerLock();
 
     document.addEventListener('mousemove', mouseControls, false);
 };
@@ -118,12 +106,36 @@ const initControls = () => {
 const rotateCamera = (currentX, currentY) => {
     camera.rotation.y -= currentX * 0.001;
     camera.rotation.x -= currentY * 0.001;
-
-    renderer.domElement.requestPointerLock();
 };
+
+const moveCamera = () => {
+    const cameraMoveSpeed = 5;
+
+    if (keyMap['d'])
+        camera.position.x += cameraMoveSpeed;
+
+    if (keyMap['a'])
+        camera.position.x -= cameraMoveSpeed;
+
+    if (keyMap['s'])
+        camera.position.z += cameraMoveSpeed;
+
+    if (keyMap['w'])
+        camera.position.z -= cameraMoveSpeed;
+
+    if (keyMap[' '])
+        camera.position.y += cameraMoveSpeed;
+
+    if (keyMap['Control'])
+        camera.position.y -= cameraMoveSpeed;
+
+    if (keyMap['Escape'])
+        document.exitPointerLock();
+}
 
 const update = () => {
     requestAnimationFrame(update);
+    moveCamera();
     renderer.render(scene, camera);
 };
 
